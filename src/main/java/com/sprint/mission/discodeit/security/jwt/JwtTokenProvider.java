@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.security.jwt;
 
+import com.sprint.mission.discodeit.dto.response.UserResponseDto;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.exception.DiscodeitException;
 import com.sprint.mission.discodeit.exception.ErrorCode;
@@ -28,7 +29,7 @@ public class JwtTokenProvider {
     return Keys.hmacShaKeyFor(keyBytes);
   }
 
-  public String generateAccessToken(User user) {
+  public String generateAccessToken(UserResponseDto userDto) {
     Date now = new Date();
     Date expiryDate = new Date(now.getTime() + jwtProperties.getAccessTokenExpiration());
 
@@ -37,18 +38,18 @@ public class JwtTokenProvider {
         .type("JWT")
         .and()
         .issuer(jwtProperties.getIssuer())
-        .subject(user.getId().toString())
+        .subject(userDto.id().toString())
         .issuedAt(now)
         .expiration(expiryDate)
-        .claim("email", user.getEmail())
-        .claim("username", user.getUsername())
-        .claim("role", user.getRole().name())
+        .claim("email", userDto.email())
+        .claim("username", userDto.username())
+        .claim("role", userDto.role().name())
         .claim("token_type", "access")
         .signWith(getSecretKey())
         .compact();
   }
 
-  public String generateRefreshToken(User user) {
+  public String generateRefreshToken(UserResponseDto userDto) {
     Date now = new Date();
     Date expiryDate = new Date(now.getTime() + jwtProperties.getRefreshTokenExpiration());
 
@@ -57,7 +58,7 @@ public class JwtTokenProvider {
         .type("JWT")
         .and()
         .issuer(jwtProperties.getIssuer())
-        .subject(user.getId().toString())
+        .subject(userDto.id().toString())
         .issuedAt(now)
         .expiration(expiryDate)
         .claim("token_type", "refresh")
