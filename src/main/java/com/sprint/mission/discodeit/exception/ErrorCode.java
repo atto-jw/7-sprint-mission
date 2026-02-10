@@ -31,7 +31,13 @@ public enum ErrorCode {
   FILE_NOT_FOUND(HttpStatus.NOT_FOUND, "F002", "파일을 찾을 수 없습니다."),
   REPO_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "F003", "저장소 초기화 실패했습니다."),
   FILE_SAVE_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "F004", "파일 저장을 실패했습니다."),
-  GET_FILE_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "F005", "파일을 가져오는데 실패했습니다.");
+  GET_FILE_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "F005", "파일을 가져오는데 실패했습니다."),
+
+  // JWT 에러
+  EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "J001", "만료된 토큰입니다."),
+  INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "J002", "유효하지 않은 토큰입니다."),
+  UNSUPPORTED_TOKEN(HttpStatus.UNAUTHORIZED, "J003", "지원하지 않는 토큰입니다.");
+
 
   private final HttpStatus status;
   private final String code;
