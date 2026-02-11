@@ -115,4 +115,14 @@ public class JwtTokenProvider {
     Claims claims = validateToken(token);
     return claims.get("role", String.class);
   }
+
+  public String getTokenType(String token) {
+    Claims claims = validateToken(token);
+    return claims.get("token_type", String.class);
+  }
+
+  public boolean isRefreshToken(String token) {
+    String tokenType = getTokenType(token);
+    return tokenType.equals("refresh");
+  }
 }
