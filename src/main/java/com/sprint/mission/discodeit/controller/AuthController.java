@@ -33,7 +33,6 @@ public class AuthController implements AuthControllerDocs {
   private final JwtTokenProvider jwtTokenProvider;
 
   @GetMapping("csrf-token")
-
   public ResponseEntity<Void> getCsrfToken(CsrfToken csrfToken) {
     String tokenValue = csrfToken.getToken();
     log.debug("CSRF Token: {}", tokenValue);

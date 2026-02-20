@@ -6,6 +6,7 @@ import com.sprint.mission.discodeit.security.LoginFailureHandler;
 import com.sprint.mission.discodeit.security.LoginSuccessHandler;
 import com.sprint.mission.discodeit.security.SpaCsrfTokenRequestHandler;
 import com.sprint.mission.discodeit.security.jwt.JwtAuthenticationFilter;
+import com.sprint.mission.discodeit.security.jwt.JwtLogoutHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,6 +37,7 @@ public class SecurityConfig {
   private final CustomAuthenticationEntryPoint authenticationEntryPoint;
   private final CustomAccessDeniedHandler accessDeniedHandler;
   private final JwtAuthenticationFilter JwtAuthenticationFilter;
+  private final JwtLogoutHandler jwtLogoutHandler;
 
   @Bean
   public PasswordEncoder passwordEncoder() {
@@ -59,6 +61,7 @@ public class SecurityConfig {
         )
         .logout(logout ->
             logout.logoutUrl("/api/auth/logout")
+                .addLogoutHandler(jwtLogoutHandler)
                 .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(
                     HttpStatus.NO_CONTENT))
         )
@@ -69,9 +72,7 @@ public class SecurityConfig {
         )
         .authorizeHttpRequests(auth ->
             auth.requestMatchers("/api/users").permitAll()
-                .requestMatchers("/api/auth/login").permitAll()
-                .requestMatchers("/api/auth/logout").permitAll()
-                .requestMatchers("/api/auth/refresh").permitAll()
+                .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api-docs.html", "/swagger-ui/**", "/swagger-ui.html",
                     "/v3/api-docs/**").permitAll()
                 .requestMatchers("/actuator/**").permitAll()
